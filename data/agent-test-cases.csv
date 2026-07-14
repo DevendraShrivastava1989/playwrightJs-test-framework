@@ -1,0 +1,8 @@
+TestCase,WebsiteURL,StepAction,Selector,Value,Notes
+LoginUI,https://www.saucedemo.com,open,,,
+LoginUI,https://www.saucedemo.com,waitForSelector,#user-name,5000,Wait for username field
+LoginUI,https://www.saucedemo.com,fill,#user-name,standard_user,Type username
+LoginUI,https://www.saucedemo.com,fill,#password,secret_sauce,Type password
+LoginUI,https://www.saucedemo.com,click,#login-button,,Click login
+LoginUI,https://www.saucedemo.com,waitForSelector,.inventory_list,5000,Wait for products list
+LoginUI,https://www.saucedemo.com,assertTitleContains,,Swag Labs,Verify title contains 'Swag Labs'

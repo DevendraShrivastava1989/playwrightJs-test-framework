@@ -1,6 +1,47 @@
-### Playwright Test Runner With JavaScript
+### Playwright UI Automation Agent (Playwright-based)
 
-An example project demonstrating automation of playwright tests using page object design pattern framework.
+A lightweight UI automation agent built on Playwright. QA engineers can run quick URL-driven checks or Excel/CSV-driven test cases without editing the Playwright test files. The repository still contains full Playwright `tests/TC_*.test.js` examples.
+
+#### UI Automation Agent
+
+This repository includes a simple CLI "agent" that lets a QA engineer quickly run UI automation by providing either a website URL or an Excel/CSV test-case file. The agent is intended for fast exploratory checks or running data-driven scenarios without editing the Playwright test files.
+
+Quick start examples:
+
+Run a single URL (opens the site and captures a screenshot):
+
+```bash
+npm run agent:url
+# or
+node agent/automationAgent.js --url https://www.saucedemo.com --browser chromium
+```
+
+Run the sample CSV/Excel-driven test (the included sample is `data/agent-test-cases.csv`):
+
+```bash
+npm run agent:excel
+# or
+node agent/automationAgent.js --excel ./data/agent-test-cases.csv --browser chromium
+```
+
+CSV/Excel format (header row) and a minimal example row:
+
+```csv
+TestCase,WebsiteURL,StepAction,Selector,Value,Notes
+LoginUI,https://www.saucedemo.com,open,,,
+LoginUI,https://www.saucedemo.com,waitForSelector,#user-name,5000,Wait for username field
+LoginUI,https://www.saucedemo.com,fill,#user-name,standard_user,Type username
+LoginUI,https://www.saucedemo.com,fill,#password,secret_sauce,Type password
+LoginUI,https://www.saucedemo.com,click,#login-button,,Click login
+LoginUI,https://www.saucedemo.com,waitForSelector,.inventory_list,5000,Wait for products list
+LoginUI,https://www.saucedemo.com,assertTitleContains,,Swag Labs,Verify title contains 'Swag Labs'
+```
+
+Supported StepAction values: `open`, `navigate`, `click`, `fill`, `select`, `press`, `hover`, `wait`, `waitForSelector`, `assertTitleContains`, `assertTextContains`, `assertUrlContains`, `screenshot`, `scrollIntoView`.
+
+Notes:
+- The agent uses Playwright under the hood; it launches a real browser and will save screenshots to the repo root (example: `agent-url-launch-screenshot.png`).
+- Keep existing `tests/TC_*.test.js` files — they remain full Playwright examples and are not modified by the agent.
 
 #### Application Under Test
 
@@ -116,6 +157,39 @@ Run tests in Parallel on all browsers (chrome, safari, edge and firefox)
 ```bash
 npm run test  - For tests only on all browsers
 ```
+
+#### UI Automation Agent
+
+This framework now includes a simple automation agent for QA users.
+
+- Run a URL-driven automation session:
+
+```bash
+npm run agent:url
+```
+
+or:
+
+```bash
+node agent/automationAgent.js --url https://www.saucedemo.com
+```
+
+- Run an Excel-driven automation session:
+
+```bash
+npm run agent:excel
+```
+
+or:
+
+```bash
+node agent/automationAgent.js --excel ./data/agent-test-cases.csv
+```
+
+The Excel test case file uses columns such as `TestCase`, `WebsiteURL`, `StepAction`, `Selector`, `Value`, and `Notes`.
+Supported actions include `open`, `navigate`, `click`, `fill`, `waitForSelector`, `assertTitleContains`, `assertTextContains`, `assertUrlContains`, and `screenshot`.
+
+Existing `tests/TC_*.test.js` files remain unchanged and continue to serve as example Playwright test cases.
 
 #### Playwright Test Report 
 
