@@ -7,7 +7,7 @@ An example project demonstrating automation of playwright tests using page objec
 We are using https://www.saucedemo.com/ as the Application Under Test. This App is a **React.js** Frontend
 
 - URL: https://www.saucedemo.com/ 
-- OS : macOS 
+- OS : Windows 10 
 - IDE : Visual Studio Code
  
 #### Scenarios
@@ -75,7 +75,7 @@ Install the dependencies and devDependencies to run the test.
 Clone the repository
 
 ```bash
-git clone https://github.com/JayKishoreDuvvuri/Playwright-JavaScript.git
+git clone https://github.com/DevendraShrivastava1989/playwrightJs-test-framework.git
 ```
 
 Install dependencies
@@ -132,10 +132,49 @@ Allure-test-report :
 2.	npm run test:firefox (OR) npm run test:safari
 3.	npm run allure:report
 ```
+#### Playwright MCP (Model Context Protocol)
 
-#### GitLab
+This repository includes `mcp.json` for Playwright MCP integration. The MCP server is configured to start using:
 
 ```bash
-Repo: https://gitlab.com/j1182/playwright-javascript
-Pipelines: https://gitlab.com/j1182/playwright-javascript/-/pipelines
+npx @playwright/mcp@latest
 ```
+
+Use MCP for IDE-driven automation workflows, server-managed test execution, and better integration with tools that support Playwright MCP.
+
+- Confirm MCP is available:
+
+```bash
+npx @playwright/mcp@latest --help
+```
+
+- The `mcp.json` file is already configured to use the Playwright MCP server in this workspace.
+
+#### GitHub Actions CI
+
+A GitHub Actions workflow is included at `.github/workflows/playwright-ci.yml`.
+
+It runs on every push to the `main` branch and performs the following steps:
+
+1. Checks out the repository
+2. Installs Node.js dependencies
+3. Installs Playwright browsers
+4. Runs `npx playwright test --reporter=html`
+5. Uploads the generated `playwright-report` directory as an artifact
+
+#### Run a specific test file
+
+```bash
+npx playwright test tests/TC_01_productPage.test.js
+```
+
+#### Run all tests with HTML report
+
+```bash
+npx playwright test --reporter=html
+```
+
+Then view the report locally with:
+
+```bash
+npx playwright show-report```
