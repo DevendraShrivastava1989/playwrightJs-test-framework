@@ -1,17 +1,15 @@
 import BasePage from './basePage'
 import { baseUrl } from '../config'
 import fs from 'fs'
-import {
-	loginPageLogo,
-	username,
-	password,
-	loginButton,
-	loginPageBotImage,
-	loginCredentials,
-	loginPasswordCredentials
-} from '../pageobjects/loginPage'
 
-import { errorMessage } from '../pageobjects/checkoutYourInformationPage'
+const loginPageLogo = '.login_logo'
+const username = "[data-test='username']"
+const password = "[data-test='password']"
+const loginButton = "[data-test='login-button']"
+const loginPageBotImage = '.bot_column'
+const loginCredentials = '#login_credentials'
+const loginPasswordCredentials = '.login_password'
+const errorMessage = "[data-test='error']"
 
 const testData = JSON.parse(fs.readFileSync(`./data/users.json`, `utf-8`))
 
@@ -37,10 +35,14 @@ class LoginPage extends BasePage {
 		return await this.isElementVisible(password, testData.notVisibleText)
 	}
 
+	async loginButtonIsVisible() {
+		return await this.isElementVisible(loginButton, testData.notVisibleText)
+	}
+
 	async loginButtonIsEnabled() {
 		return await this.isElementEnabled(loginButton, testData.notEnabledText)
 	}
-
+	
 	async botImageVisible() {
 		return await this.isElementEnabled(
 			loginPageBotImage,

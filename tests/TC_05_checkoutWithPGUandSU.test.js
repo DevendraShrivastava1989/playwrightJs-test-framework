@@ -48,7 +48,7 @@ import {
 	checkoutCompleteUrl
 } from '../config'
 
-test.describe.parallel(
+test.describe.serial(
 	'Login as a Locked out user and Performance glitch user and complete the checkout workflow with Standard user' +
 		'',
 	() => {

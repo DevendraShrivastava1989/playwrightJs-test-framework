@@ -1,21 +1,18 @@
 import BasePage from './basePage'
 import fs from 'fs'
-import {
-	appLogo,
-	burgerMenuBtn,
-	shoppingCartLink,
-	footerText,
-	twitterLink,
-	facebookLink,
-	linkedInLink
-} from '../pageobjects/productsPage'
-import {
-	title,
-	completeHeader,
-	completeText,
-	ponyExpressImage,
-	backHomeButton
-} from '../pageobjects/checkoutCompletePage'
+
+const appLogo = '.app_logo'
+const burgerMenuBtn = '#react-burger-menu-btn'
+const shoppingCartLink = '.shopping_cart_link'
+const footerText = '.footer_copy'
+const twitterLink = 'text=Twitter'
+const facebookLink = 'text=Facebook'
+const linkedInLink = 'text=LinkedIn'
+const title = '.title'
+const completeHeader = 'text=Thank you for your order!'
+const completeText = '.complete-text'
+const ponyExpressImage = "img[alt='Pony Express']"
+const backHomeButton = "[data-test='back-to-products']"
 
 const testData = JSON.parse(fs.readFileSync(`./data/users.json`, `utf-8`))
 

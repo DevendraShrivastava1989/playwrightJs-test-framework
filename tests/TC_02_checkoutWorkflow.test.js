@@ -43,7 +43,7 @@ import {
 	checkoutCompleteUrl
 } from '../config'
 
-test.describe('Login as a standard user to complete the checkout workflow', () => {
+test.describe.serial('Login as a standard user to complete the checkout workflow', () => {
 	test('Login to App as a standard user', async ({
 		loginPage,
 		productsPage,

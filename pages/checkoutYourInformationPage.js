@@ -1,23 +1,20 @@
 import BasePage from './basePage'
 import fs from 'fs'
-import {
-	appLogo,
-	burgerMenuBtn,
-	shoppingCartLink,
-	footerText,
-	twitterLink,
-	facebookLink,
-	linkedInLink
-} from '../pageobjects/productsPage'
-import {
-	title,
-	firstName,
-	lastName,
-	postalCode,
-	cancelButton,
-	continueButton,
-	errorMessage
-} from '../pageobjects/checkoutYourInformationPage'
+
+const appLogo = '.app_logo'
+const burgerMenuBtn = '#react-burger-menu-btn'
+const shoppingCartLink = '.shopping_cart_link'
+const footerText = '.footer_copy'
+const twitterLink = 'text=Twitter'
+const facebookLink = 'text=Facebook'
+const linkedInLink = 'text=LinkedIn'
+const title = '.title'
+const firstName = "[data-test='firstName']"
+const lastName = "[data-test='lastName']"
+const postalCode = "[data-test='postalCode']"
+const cancelButton = "[data-test='cancel']"
+const continueButton = "[data-test='continue']"
+const errorMessage = "[data-test='error']"
 
 const testData = JSON.parse(fs.readFileSync(`./data/users.json`, `utf-8`))
 

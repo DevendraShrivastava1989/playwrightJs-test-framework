@@ -1,28 +1,25 @@
 import BasePage from './basePage'
 import fs from 'fs'
-import {
-	appLogo,
-	burgerMenuBtn,
-	shoppingCartLink,
-	fleeceJacketname,
-	footerText,
-	twitterLink,
-	facebookLink,
-	linkedInLink
-} from '../pageobjects/productsPage'
-import {
-	title,
-	cartQuantityLabel,
-	cartItemLabel,
-	cartDescriptionLabel,
-	cartQuantity,
-	flecceJacketText,
-	continueShoppingButton,
-	removeButton,
-	checkoutButton,
-	fleeceJacketPrice,
-	removeButtonTshirtRed
-} from '../pageobjects/yourCartPage'
+
+const appLogo = '.app_logo'
+const burgerMenuBtn = '#react-burger-menu-btn'
+const shoppingCartLink = '.shopping_cart_link'
+const fleeceJacketname = '#item_5_title_link'
+const footerText = '.footer_copy'
+const twitterLink = 'text=Twitter'
+const facebookLink = 'text=Facebook'
+const linkedInLink = 'text=LinkedIn'
+const title = '.title'
+const cartQuantityLabel = '.cart_quantity_label'
+const cartItemLabel = '.cart_item_label'
+const cartDescriptionLabel = '.cart_desc_label'
+const cartQuantity = '.cart_quantity'
+const flecceJacketText = "//div[@class='inventory_item_desc']"
+const fleeceJacketPrice = "//div[@class='inventory_item_price']"
+const continueShoppingButton = "[data-test='continue-shopping']"
+const removeButton = "[data-test='remove-sauce-labs-fleece-jacket']"
+const removeButtonTshirtRed = "[data-test='remove-test.allthethings()-t-shirt-(red)']"
+const checkoutButton = "[data-test='checkout']"
 
 const testData = JSON.parse(fs.readFileSync(`./data/users.json`, `utf-8`))
 

@@ -34,12 +34,13 @@
     "Test Automation",
     "JavaScript"
   ],
-  "author": "Jay Kishore Duvvuri",
+  "author": "Devendra Shrivastava",
   "license": "ISC",
   "dependencies": {
     "@playwright/test": "^1.36.2",
     "allure-playwright": "^2.4.0",
     "fs": "^0.0.1-security",
+    "playwright": "^1.61.1",
     "prettier": "^2.6.2"
   }
 }

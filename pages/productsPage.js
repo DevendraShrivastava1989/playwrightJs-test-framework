@@ -1,56 +1,56 @@
 import BasePage from './basePage'
 import fs from 'fs'
-import {
-	appLogo,
-	landingPageTitle,
-	landingPageImage,
-	burgerMenuBtn,
-	burgerCrossButton,
-	allItemsSideBarLink,
-	aboutSideBarLink,
-	logoutSideBarLink,
-	resetSideBarLink,
-	shoppingCartLink,
-	productSortContainer,
-	inventoryContainer,
-	backPackImage,
-	backPackName,
-	backPackText,
-	backPackPrice,
-	backPackAddToCartBtn,
-	boltTshirtImage,
-	boltTshirtName,
-	boltTshirtText,
-	boltTshirtPrice,
-	boltTshirtAddToCartBtn,
-	onesieImage,
-	onesieName,
-	onesieText,
-	onesiePrice,
-	onesieAddToCartBtn,
-	bikeLightImage,
-	bikeLightName,
-	bikeLightText,
-	bikeLightPrice,
-	bikeLightAddToCartBtn,
-	fleeceJacketImage,
-	fleeceJacketname,
-	flecceJacketText,
-	fleeceJacketPrice,
-	fleeceJacketAddToCartBtn,
-	tshirtRedImage,
-	tshirtRedName,
-	tshirtRedText,
-	tshirtRedPrice,
-	tshirtRedAddToCartBtn,
-	listOfElements,
-	footerText,
-	twitterLink,
-	facebookLink,
-	linkedInLink,
-	removeButton,
-	addtoCartBtnAll
-} from '../pageobjects/productsPage'
+
+const appLogo = '.app_logo'
+const landingPageTitle = '.title'
+const landingPageImage = '.peek'
+const burgerMenuBtn = '#react-burger-menu-btn'
+const burgerCrossButton = '#react-burger-cross-btn'
+const allItemsSideBarLink = '#inventory_sidebar_link'
+const aboutSideBarLink = '#about_sidebar_link'
+const logoutSideBarLink = '#logout_sidebar_link'
+const resetSideBarLink = '#reset_sidebar_link'
+const shoppingCartLink = '.shopping_cart_link'
+const productSortContainer = "[data-test='product-sort-container']"
+const inventoryContainer = "(//div[@id='inventory_container'])[2]"
+const backPackImage = '#item_4_img_link'
+const backPackName = 'text=Sauce Labs Backpack'
+const backPackText = "(//div[@class='inventory_item_desc'])[1]"
+const backPackPrice = "(//div[@class='inventory_item_price'])[1]"
+const backPackAddToCartBtn = "[data-test='add-to-cart-sauce-labs-backpack']"
+const boltTshirtImage = '#item_1_img_link'
+const boltTshirtName = '#item_1_title_link'
+const boltTshirtText = "(//div[@class='inventory_item_desc'])[3]"
+const boltTshirtPrice = "(//div[@class='inventory_item_price'])[3]"
+const boltTshirtAddToCartBtn = "[data-test='add-to-cart-sauce-labs-bolt-t-shirt']"
+const onesieImage = '#item_2_img_link'
+const onesieName = '#item_2_title_link'
+const onesieText = "(//div[@class='inventory_item_desc'])[5]"
+const onesiePrice = "(//div[@class='inventory_item_price'])[5]"
+const onesieAddToCartBtn = "[data-test='add-to-cart-sauce-labs-onesie']"
+const bikeLightImage = '#item_0_img_link'
+const bikeLightName = '#item_0_title_link'
+const bikeLightText = "(//div[@class='inventory_item_desc'])[2]"
+const bikeLightPrice = "(//div[@class='inventory_item_price'])[2]"
+const bikeLightAddToCartBtn = "[data-test='add-to-cart-sauce-labs-bike-light']"
+const fleeceJacketImage = '#item_5_img_link'
+const fleeceJacketname = '#item_5_title_link'
+const flecceJacketText = "(//div[@class='inventory_item_desc'])[4]"
+const fleeceJacketPrice = "(//div[@class='inventory_item_price'])[4]"
+const fleeceJacketAddToCartBtn = "[data-test='add-to-cart-sauce-labs-fleece-jacket']"
+const tshirtRedImage = '#item_3_img_link'
+const tshirtRedName = '#item_3_title_link'
+const tshirtRedText = "(//div[@class='inventory_item_desc'])[6]"
+const tshirtRedPrice = "(//div[@class='inventory_item_price'])[6]"
+const tshirtRedAddToCartBtn = "[data-test='add-to-cart-test.allthethings()-t-shirt-(red)']"
+const listOfElements = "//div[@class='inventory_item']"
+const footerText = '.footer_copy'
+const swagBotFooter = "img[alt='Swag Bot Footer']"
+const twitterLink = 'text=Twitter'
+const facebookLink = 'text=Facebook'
+const linkedInLink = 'text=LinkedIn'
+const removeButton = "[data-test='remove-sauce-labs-backpack']"
+const addtoCartBtnAll = 'button.btn.btn_primary.btn_small.btn_inventory'
 
 const testData = JSON.parse(fs.readFileSync(`./data/users.json`, `utf-8`))
 
@@ -191,6 +191,11 @@ class ProductsPage extends BasePage {
 	}
 
 	async selectHighToLowFromDropDown() {
+
+	await this.page.locator(productSortContainer).waitFor({
+    state: 'visible'
+      })
+
 		return await this.selectValueFromDropdown(
 			productSortContainer,
 			testData.optionHighToLow

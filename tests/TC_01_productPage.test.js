@@ -27,12 +27,12 @@ Test test.steps:
 import test from '../testFixtures/fixture'
 import { expect } from '@playwright/test'
 import fs from 'fs'
-import { username, password, loginButton } from '../pageobjects/loginPage'
-import {
-	twitterLink,
-	facebookLink,
-	linkedInLink
-} from '../pageobjects/productsPage'
+const username = "[data-test='username']"
+const password = "[data-test='password']"
+const loginButton = "[data-test='login-button']"
+const twitterLink = 'text=Twitter'
+const facebookLink = 'text=Facebook'
+const linkedInLink = 'text=LinkedIn'
 const testData = JSON.parse(fs.readFileSync(`./data/users.json`, `utf-8`))
 
 import {
@@ -51,7 +51,7 @@ import {
 	linkedInUrl
 } from '../config'
 
-test.describe.parallel(
+test.describe.serial(
 	'@smoke: Login as a standard user to verify the products page and logout from the application',
 	() => {
 		test('Login to App as a standard user', async ({
@@ -243,7 +243,7 @@ test.describe.serial('Verify All Social Channel Links', () => {
 			await link.click()
 		])
 		await newPage.waitForLoadState('domcontentloaded')
-		await newPage.waitForLoadState('networkidle')
+		//await newPage.waitForLoadState('networkidle')
 		expect(newPage.url()).toBe(twitterUrl)
 	})
 })

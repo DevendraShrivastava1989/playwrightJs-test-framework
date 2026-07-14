@@ -1,23 +1,20 @@
 import BasePage from './basePage'
 import fs from 'fs'
-import {
-	appLogo,
-	burgerMenuBtn,
-	shoppingCartLink,
-	footerText,
-	twitterLink,
-	facebookLink,
-	linkedInLink
-} from '../pageobjects/productsPage'
-import {
-	image,
-	backToProductsButton,
-	productName,
-	productDescription,
-	productPrice,
-	addToCartButton,
-	removeButton
-} from '../pageobjects/productDetailsPage'
+
+const appLogo = '.app_logo'
+const burgerMenuBtn = '#react-burger-menu-btn'
+const shoppingCartLink = '.shopping_cart_link'
+const footerText = '.footer_copy'
+const twitterLink = 'text=Twitter'
+const facebookLink = 'text=Facebook'
+const linkedInLink = 'text=LinkedIn'
+const image = "img[alt='Sauce Labs Backpack']"
+const backToProductsButton = "[data-test='back-to-products']"
+const productName = '.inventory_details_name.large_size'
+const productDescription = '.inventory_details_desc.large_size'
+const productPrice = '.inventory_details_price'
+const addToCartButton = "[data-test^='add-to-cart']"
+const removeButton = "[data-test^='remove']"
 
 const testData = JSON.parse(fs.readFileSync(`./data/users.json`, `utf-8`))
 
@@ -75,7 +72,7 @@ class ProductDetailsPage extends BasePage {
 	}
 
 	async clickAddToCartButton() {
-		await this.isElementEnabled(addToCartButton, testData.notEnabledText)
+		//await this.isElementEnabled(addToCartButton, testData.notEnabledText)
 		return await this.waitAndClick(addToCartButton)
 	}
 

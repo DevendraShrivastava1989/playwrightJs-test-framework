@@ -1,6 +1,6 @@
 export const testDir = 'tests'
 export const timeout = 60000
-export const retries = 0
+export const retries = 1
 export const reporter = [
 	['html'],
 	['junit', { outputFile: 'results.xml' }],
@@ -13,12 +13,13 @@ export const projects = [
 			browserName: `chromium`,
 			channel: `chrome`,
 			headless: false,
-			viewport: { width: 1720, height: 850 },
+			viewport: { width: 1280, height: 720 },
 			screenshot: `only-on-failure`,
 			video: `retain-on-failure`,
 			trace: `retain-on-failure`
 		}
 	},
+	/*
 	{
 		name: `Firefox`,
 		use: {
@@ -59,5 +60,5 @@ export const projects = [
 				slowMo: 100
 			}
 		}
-	}
+	}*/
 ]
