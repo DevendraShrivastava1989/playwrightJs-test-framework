@@ -87,11 +87,83 @@ function normalizeRow(row) {
 function inferAction(stepAction) {
   return stepAction.toString().trim().toLowerCase().replace(/\s+/g, '')
 }
+async function resolveLocator(page, row, action) {
+  // Prefer explicit selector if provided
+  if (row.selector) return page.locator(row.selector)
+
+  const text = (row.value || row.notes || '').toString().trim()
+  const act = inferAction(action || row.stepAction || '')
+
+  // Heuristics per action type
+  try {
+    if (act === 'fill') {
+      if (row.notes) {
+        const byLabel = page.getByLabel(row.notes)
+        if (await byLabel.count() > 0) return byLabel
+      }
+      if (text) {
+        const byPlaceholder = page.getByPlaceholder(text)
+        if (await byPlaceholder.count() > 0) return byPlaceholder
+      }
+      // pick first empty visible input/textarea
+      const inputs = page.locator('input:not([type=hidden]):not([disabled]), textarea:not([disabled])')
+      const c = await inputs.count()
+      for (let i = 0; i < c; i += 1) {
+        const el = inputs.nth(i)
+        let val = ''
+        try { val = await el.inputValue() } catch (e) { val = '' }
+        if (!val) return el
+      }
+      if (c > 0) return inputs.first()
+      return null
+    }
+
+    if (act === 'click') {
+      if (text) {
+        const byRole = page.getByRole('button', { name: text })
+        if (await byRole.count() > 0) return byRole
+        const byText = page.getByText(text)
+        if (await byText.count() > 0) return byText
+      }
+      const clickables = page.locator('button, a, input[type=button], input[type=submit], [role="button"]')
+      if (await clickables.count() > 0) return clickables.first()
+      return null
+    }
+
+    if (act === 'select') {
+      const selects = page.locator('select')
+      if (await selects.count() > 0) return selects.first()
+      return null
+    }
+
+    if (act === 'waitforselector' || act === 'waitfor') {
+      if (text) {
+        const byText = page.getByText(text)
+        if (await byText.count() > 0) return byText
+      }
+      return null
+    }
+
+    if (act === 'asserttext' || act === 'asserttextcontains') {
+      if (text) {
+        const byText = page.getByText(text)
+        if (await byText.count() > 0) return byText
+      }
+      return null
+    }
+  } catch (e) {
+    // best-effort: ignore and return null so caller can fall back
+    return null
+  }
+
+  return null
+}
 
 async function runStep(page, row, currentUrl) {
   const action = inferAction(row.stepAction)
   const selector = row.selector || ''
   const value = row.value || ''
+  let locator = null
 
   switch (action) {
     case 'open':
@@ -102,31 +174,38 @@ async function runStep(page, row, currentUrl) {
       return page.goto(row.websiteUrl || value)
 
     case 'click':
-      if (!selector) throw new Error('Click step requires a Selector column.')
-      return page.click(selector)
+      locator = await resolveLocator(page, row, 'click')
+      if (!locator) throw new Error('Click step requires a Selector column or could not infer a clickable element.')
+      return locator.click()
 
     case 'fill':
-      if (!selector) throw new Error('Fill step requires a Selector column.')
-      return page.fill(selector, value)
+      locator = await resolveLocator(page, row, 'fill')
+      if (!locator) throw new Error('Fill step requires a Selector column or could not infer an input element.')
+      return locator.fill(value)
 
     case 'select':
-      if (!selector) throw new Error('Select step requires a Selector column.')
-      return page.selectOption(selector, { value })
+      locator = await resolveLocator(page, row, 'select')
+      if (!locator) throw new Error('Select step requires a Selector column or could not infer a select element.')
+      return locator.selectOption({ value })
 
     case 'press':
-      if (!selector) throw new Error('Press step requires a Selector column.')
-      return page.press(selector, value || 'Enter')
+      locator = await resolveLocator(page, row, 'press')
+      if (!locator) throw new Error('Press step requires a Selector column or could not infer an element to press on.')
+      return locator.press(value || 'Enter')
 
     case 'hover':
-      if (!selector) throw new Error('Hover step requires a Selector column.')
-      return page.hover(selector)
+      locator = await resolveLocator(page, row, 'hover')
+      if (!locator) throw new Error('Hover step requires a Selector column or could not infer an element to hover.')
+      return locator.hover()
 
     case 'wait':
       return page.waitForTimeout(Number(value) || 1000)
 
     case 'waitforselector':
-      if (!selector) throw new Error('WaitForSelector step requires a Selector column.')
-      return page.waitForSelector(selector, { timeout: 15000 })
+      if (selector) return page.waitForSelector(selector, { timeout: 15000 })
+      locator = await resolveLocator(page, row, 'waitforselector')
+      if (locator) return locator.waitFor({ timeout: 15000 })
+      throw new Error('WaitForSelector step requires a Selector column or a Value/Notes to wait for.')
 
     case 'asserttitlecontains':
     case 'asserttitle': {
@@ -139,10 +218,18 @@ async function runStep(page, row, currentUrl) {
 
     case 'asserttextcontains':
     case 'asserttext': {
-      if (!selector) throw new Error('AssertText step requires a Selector column.')
-      const content = await page.textContent(selector)
+      if (selector) {
+        const content = await page.textContent(selector)
+        if (!content || !content.includes(value)) {
+          throw new Error(`Expected element ${selector} text to contain '${value}', but got '${content}'.`)
+        }
+        return
+      }
+      locator = await resolveLocator(page, row, 'asserttext')
+      if (!locator) throw new Error('AssertText step requires a Selector column or a Value to search for.')
+      const content = await locator.textContent()
       if (!content || !content.includes(value)) {
-        throw new Error(`Expected element ${selector} text to contain '${value}', but got '${content}'.`)
+        throw new Error(`Expected element text to contain '${value}', but got '${content}'.`)
       }
       return
     }
