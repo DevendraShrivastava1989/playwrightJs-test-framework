@@ -4,7 +4,9 @@ A lightweight UI automation agent built on Playwright. QA engineers can run quic
 
 #### UI Automation Agent
 
-This repository includes a simple CLI "agent" that lets a QA engineer quickly run UI automation by providing either a website URL or an Excel/CSV test-case file. The agent is intended for fast exploratory checks or running data-driven scenarios without editing the Playwright test files.
+This repository includes a simple CLI "agent" that lets a QA engineer quickly run UI automation by providing either a website URL or an Excel/CSV test-case file. The agent is intended for fast exploratory checks and data-driven scenarios without editing the Playwright test files.
+
+The agent can infer locators automatically when the CSV does not include a `Selector` column. For actions such as `fill`, `click`, and `assertText`, it will use `Notes`, input labels, placeholders, visible buttons, and page text to find the correct elements.
 
 Quick start examples:
 
@@ -30,9 +32,9 @@ CSV/Excel format (header row) and a minimal example row:
 TestCase,WebsiteURL,StepAction,Selector,Value,Notes
 LoginUI,https://www.saucedemo.com,open,,,
 LoginUI,https://www.saucedemo.com,waitForSelector,#user-name,5000,Wait for username field
-LoginUI,https://www.saucedemo.com,fill,#user-name,standard_user,Type username
-LoginUI,https://www.saucedemo.com,fill,#password,secret_sauce,Type password
-LoginUI,https://www.saucedemo.com,click,#login-button,,Click login
+LoginUI,https://www.saucedemo.com,fill,,standard_user,Enter username into the first input
+LoginUI,https://www.saucedemo.com,fill,,secret_sauce,Enter password into the password field
+LoginUI,https://www.saucedemo.com,click,,Login,Click the login button
 LoginUI,https://www.saucedemo.com,waitForSelector,.inventory_list,5000,Wait for products list
 LoginUI,https://www.saucedemo.com,assertTitleContains,,Swag Labs,Verify title contains 'Swag Labs'
 ```
@@ -41,6 +43,7 @@ Supported StepAction values: `open`, `navigate`, `click`, `fill`, `select`, `pre
 
 Notes:
 - The agent uses Playwright under the hood; it launches a real browser and will save screenshots to the repo root (example: `agent-url-launch-screenshot.png`).
+- `Selector` is optional for many actions; the agent will attempt to infer the correct element from `Value` or `Notes` when possible.
 - Keep existing `tests/TC_*.test.js` files — they remain full Playwright examples and are not modified by the agent.
 
 #### Application Under Test
